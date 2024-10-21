@@ -1,6 +1,6 @@
 from typing import List, Tuple, Callable, Any
 from match import match
-from data import pollutant_production_db_IL, pollutant_production_db_CHI
+from data import pollutant_production_db_IL, pollutant_production_db_CHI, AQI_Ranked
 
 
 
@@ -27,11 +27,43 @@ def location_with_AQI(AQI) -> str:
                 final=pollutant_production_db_CHI[i][1]
     return final
 
+def LocationRank(location):
+    position=0
+    for i in range(len(AQI_Ranked)):
+        if location==AQI_Ranked[i]:
+            position=i+1
+    if position==0:
+        position="location not found"
+    return position
 
-
+def get_data_IL(parameter):
+    ans=None
+    for i in range(len(pollutant_production_db_IL)):
+        for i2 in range(len(pollutant_production_db_IL[i][0])):
+            #print(pollutant_production_db_IL[i][0][i2])
+            if parameter==pollutant_production_db_IL[i][0][i2]:
+                ans=pollutant_production_db_IL[i][1]
+    if ans==None:
+        ans="Not in database"
+    return ans
+#print(get_data_IL("CO"))
+def days_with_AQI(data):
+    location=None
+    AQI=None
+    if type(data)==str:
+        location=data
+    if type(data)==int:
+        AQI=data
+    if location==None:
+        for i in range(len(pollutant_production_db_CHI)):
+            for i2 in range(1,len(pollutant_production_db_CHI[i]):
+                print(i2)
+days_with_AQI()
 pa_list=[
-        (('What', 'is', 'the', 'AQI', 'of', '%'), get_AQI_avg),
-        (('what','location','has','an','AQI','of','_'),location_with_AQI)
+        (('What', 'is', 'the','AQI','of','%'), get_AQI_avg),
+        (('what','location','has','an','AQI','of','_'),location_with_AQI),
+        (('where','does','%','rank'),LocationRank),
+        (('Find', 'the', 'concentration', 'of', '%', 'in', 'Illinois'),get_data_IL)
         ]
 def search_pa_list(src: List[str]) -> List[str]:
     
@@ -94,4 +126,4 @@ def search_pa_list(src: List[str]) -> List[str]:
 
 
     return ans
-print(search_pa_list("What location has an AQI of 47"))
+print(search_pa_list("Find the concentration of Carbon Monoxide in Chicago"))

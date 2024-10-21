@@ -65,5 +65,5 @@ pollutant_production_db_CHI: List[Tuple[str,str,List[int]]] = [
      0
      ]
     )
-
 ]
+AQI_Ranked=["Lake County","Chicago","Northwest Suburbs","Illinois","Southwest Suburbs"]
