@@ -2,34 +2,34 @@ from typing import List, Tuple
 
 pollutant_production_db_IL: List[Tuple[List[str],float,int]] = [
     (
-     ["AQI"], # List of possible ways to reference the data
+     ["aqi"], # List of possible ways to reference the data
      55,      # Measurment
      2020     # Year taken
     ),
     (
-     ["Ozone","O3"], 
+     ["ozone","o3"], 
      .082, 
      2021
     ),
     (
-     ["Carbon Monoxide","CO"], 
+     ["carbon monoxide","co"], 
      1.21, 
      2021
     ),
     (
-     ["Sulfur Dioxide","S02"], 
+     ["sulfur dioxide","so2"], 
      .0021, 
      2021
     ),
     (
-     ["Nitrogen Dioxide","NO2"], 
+     ["nitrogen dioxide","no2"], 
      .00126, 
      2021
     )
 ]
 pollutant_production_db_CHI: List[Tuple[str,str,List[int]]] = [
     #("AQI", "Average", [49]),
-    ("AQI", "Lake County",
+    ("aqi", "lake county",
      [ 
      43,  #Average AQI
      239, # days per year W/ AQI between 0 & 51 (good)
@@ -38,7 +38,7 @@ pollutant_production_db_CHI: List[Tuple[str,str,List[int]]] = [
      0,   # days per year W/ AQI between 151 & 200 (unhealthy)
      ]
     ),
-    ("AQI", "Chicago", 
+    ("aqi", "chicago", 
      [
      47,
      214,
@@ -47,7 +47,7 @@ pollutant_production_db_CHI: List[Tuple[str,str,List[int]]] = [
      0
      ]
     ),
-    ("AQI", "Northwest suburbs", 
+    ("aqi", "northwest suburbs", 
      [
      50,
      197,
@@ -56,7 +56,7 @@ pollutant_production_db_CHI: List[Tuple[str,str,List[int]]] = [
      1
      ]
     ),
-    ("AQI", "Southwest suburbs", 
+    ("aqi", "southwest suburbs", 
      [
      54,
      159,
@@ -66,4 +66,4 @@ pollutant_production_db_CHI: List[Tuple[str,str,List[int]]] = [
      ]
     )
 ]
-AQI_Ranked=["Lake County","Chicago","Northwest Suburbs","Illinois","Southwest Suburbs"]
+AQI_Ranked=["lake county","chicago","northwest suburbs","illinois","southwest suburbs"]

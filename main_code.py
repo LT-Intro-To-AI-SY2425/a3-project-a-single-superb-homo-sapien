@@ -6,7 +6,7 @@ from data import pollutant_production_db_IL, pollutant_production_db_CHI, AQI_Ra
 
 def get_AQI_avg(location) -> int:
     final=0
-    if location=="Illinois":
+    if location=="illinois":
         final=pollutant_production_db_IL[0][1]
     else:
         for i in range(len(pollutant_production_db_CHI)):
@@ -20,7 +20,7 @@ def location_with_AQI(AQI) -> str:
     AQI=int(AQI)
     final=0
     if AQI==pollutant_production_db_IL[0][1]:
-        final="Illinois"
+        final="illinois"
     else:
         for i in range(len(pollutant_production_db_CHI)):
             if AQI==pollutant_production_db_CHI[i][2][0]:
@@ -40,31 +40,52 @@ def get_data_IL(parameter):
     ans=None
     for i in range(len(pollutant_production_db_IL)):
         for i2 in range(len(pollutant_production_db_IL[i][0])):
-            #print(pollutant_production_db_IL[i][0][i2])
             if parameter==pollutant_production_db_IL[i][0][i2]:
                 ans=pollutant_production_db_IL[i][1]
     if ans==None:
         ans="Not in database"
     return ans
-#print(get_data_IL("CO"))
-def days_with_AQI(data):
-    location=None
-    AQI=None
-    if type(data)==str:
-        location=data
-    if type(data)==int:
-        AQI=data
-    if location==None:
-        for i in range(len(pollutant_production_db_CHI)):
-            for i2 in range(1,len(pollutant_production_db_CHI[i]):
-                print(i2)
-days_with_AQI()
+
+def get_year_of_data(data):
+    ans=None
+    for i in range(len(pollutant_production_db_IL)):
+        for i2 in range(len(pollutant_production_db_IL[i][0])):
+            if data==pollutant_production_db_IL[i][0][i2]:
+                ans=pollutant_production_db_IL[i][2]
+    if ans==None:
+        ans="Year not in database"
+    return ans
+
+def days_with_AQI(input):
+    input=input.split()
+    value=input[len(input)-1]
+    del input[len(input)-1]
+    location=' '.join(input)
+    finalList=[]
+    for i in range(len(pollutant_production_db_CHI)):
+        if location==pollutant_production_db_CHI[i][1]:
+            finalList=pollutant_production_db_CHI[i][2]
+    if value=='good':
+        final=finalList[1]
+    if value=='moderate':
+        final=finalList[2]
+    if value=='unhealthy':
+        final=finalList[3]+finalList[4]
+    return final
+
+def bye_action(dummy: List[str]) -> None:
+    raise KeyboardInterrupt
+
 pa_list=[
-        (('What', 'is', 'the','AQI','of','%'), get_AQI_avg),
-        (('what','location','has','an','AQI','of','_'),location_with_AQI),
+        (('what', 'is', 'the','aqi','of','%'), get_AQI_avg),
+        (('what','location','has','an','aqi','of','_'),location_with_AQI),
         (('where','does','%','rank'),LocationRank),
-        (('Find', 'the', 'concentration', 'of', '%', 'in', 'Illinois'),get_data_IL)
+        (('find', 'the', 'concentration', 'of', '%', 'in', 'illinois'),get_data_IL),
+        (('for','how','many','days','was','the','aqi','of','%','_'),days_with_AQI),
+        (('in','what','year','was','the','%','data','for','illinois','taken'),get_year_of_data),
+        (["bye"], bye_action)
         ]
+
 def search_pa_list(src: List[str]) -> List[str]:
     
     #VARIABLES
@@ -73,9 +94,7 @@ def search_pa_list(src: List[str]) -> List[str]:
     HighestMatches=0
     BestMatch=0
     ans=[]
-    print(src)
-    src=str.split(src)
-    print(src)
+    #src=str.split(src)
     # FIGURING OUT WHAT TUPLE TO USE
 
     # Creating a list(matches[]) of the number of matches between each value of src[] 
@@ -83,11 +102,9 @@ def search_pa_list(src: List[str]) -> List[str]:
     for i in range(len(pa_list)):
         for i2 in range(len(pa_list[i][0])):
             if i2<len(src):
-                print(src[i2],pa_list[i][0][i2])
                 if src[i2]==pa_list[i][0][i2]:
                     CurrentListMatches+=1
         matches.append(CurrentListMatches)
-        print(matches)
         CurrentListMatches=0
 
     # Figuring out which tuple has the highest match between its pattern and the given source using matches[] 
@@ -97,33 +114,47 @@ def search_pa_list(src: List[str]) -> List[str]:
             HighestMatches=matches[i]
 
     # CALLING THE APPROPRIATE FUNCTION
-    print(BestMatch)
-    # Telling this block of code to run only if there is a match (if there are no matches, skip to line 193)
+    # Telling this block of code to run only if there is a match (if there are no matches, skip to line 150)
     if BestMatch!=0:
 
         # VARIABLES
         Diff=len(src)-len(BestMatch[0])
         val=[]
-        
+        i2=0
+
         # Checking for every item in the string of the matched tuple for %s and _s, then utilizing those symbols to determine 
         # what to send into the function
         for i3 in range(len(BestMatch[0])):
-            if BestMatch[0][i3]=="%": 
-                for i2 in range(Diff+1): val.append(src[i3+i2])
-            if BestMatch[0][i3]=="_": val.append(src[i3]); print(val)
+            if BestMatch[0][i3]=="%":
+                while i2 in range(Diff+1): 
+                    val.append(src[i3+i2])
+                    i2+=1
+            if BestMatch[0][i3]=="_": val.append(src[i3+Diff]);
 
         # Calling the function of said tuple once the loop has ended and the list of inputs is therefore complete,
         # and setting ans equal to the output of that function
         if type(val)==list:
             val=' '.join(val)
-        print(val)
         ans=BestMatch[1](val)
 
     # Telling the function what to do if there are no matches(if statement) 
     # or if the function of said match returns blank list(elif statement)
-    if BestMatch==0: ans=["I don't understand"]
-    elif ans==[]: ans=["No answers"]
+    if BestMatch==0: ans="I don't understand"
+    elif ans==[]: ans="No answers"
 
+    return str(ans)
 
-    return ans
-#print(search_pa_list("Find the concentration of Carbon Monoxide in Chicago"))
+def query_loop() -> None:
+    print("This is a database of information from various years combined to make a small, nonofficial climate report of Chicago and the surrounding area.\nEnter a question into the query prompt to recieve an answer.")
+    while True:
+        try:
+            print()
+            query = input("Query: ").replace("?", "").lower().split()
+            answers = search_pa_list(query)
+            print(answers)
+
+        except (KeyboardInterrupt, EOFError):
+            break
+
+    print("\nSo long!\n")
+query_loop()
