@@ -156,5 +156,5 @@ def query_loop() -> None:
         except (KeyboardInterrupt, EOFError):
             break
 
-    print("\nSo long!\n")
+    print("\nThank you for using this database.\n")
 query_loop()
