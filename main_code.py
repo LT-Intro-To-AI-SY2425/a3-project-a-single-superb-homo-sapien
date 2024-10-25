@@ -131,7 +131,6 @@ def search_pa_list(src: List[str]) -> List[str]:
         # and setting ans equal to the output of that function
         if type(val)==list:
             val=' '.join(val)
-        print(val)
         ans=BestMatch[1](val)
 
     # Telling the function what to do if there are no matches(if statement) 
