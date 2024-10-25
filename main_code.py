@@ -5,20 +5,18 @@ from data import pollutant_production_db_IL, pollutant_production_db_CHI, AQI_Ra
 
 
 def get_AQI_avg(location) -> int:
-    final=0
+    final="Location not in database"
     if location=="illinois":
         final=pollutant_production_db_IL[0][1]
     else:
         for i in range(len(pollutant_production_db_CHI)):
             if pollutant_production_db_CHI[i][1]==location:
                 final=pollutant_production_db_CHI[i][2][0]
-    if final==0:
-        final="Location not in database"
-    return(final)
+    return final
 
 def location_with_AQI(AQI) -> str:
     AQI=int(AQI)
-    final=0
+    final="Location not in database"
     if AQI==pollutant_production_db_IL[0][1]:
         final="illinois"
     else:
@@ -28,51 +26,49 @@ def location_with_AQI(AQI) -> str:
     return final
 
 def LocationRank(location):
-    position=0
+    position="location not found"
     for i in range(len(AQI_Ranked)):
         if location==AQI_Ranked[i]:
             position=i+1
-    if position==0:
-        position="location not found"
     return position
 
 def get_data_IL(parameter):
-    ans=None
+    ans="Not in database"
     for i in range(len(pollutant_production_db_IL)):
         for i2 in range(len(pollutant_production_db_IL[i][0])):
             if parameter==pollutant_production_db_IL[i][0][i2]:
                 ans=pollutant_production_db_IL[i][1]
-    if ans==None:
-        ans="Not in database"
     return ans
 
 def get_year_of_data(data):
-    ans=None
+    ans="Not in database"
     for i in range(len(pollutant_production_db_IL)):
         for i2 in range(len(pollutant_production_db_IL[i][0])):
             if data==pollutant_production_db_IL[i][0][i2]:
                 ans=pollutant_production_db_IL[i][2]
-    if ans==None:
-        ans="Year not in database"
     return ans
 
 def days_with_AQI(input):
-    input=input.split()
-    value=input[len(input)-1]
-    del input[len(input)-1]
-    location=' '.join(input)
+
+    breaker=input.rfind(" ")
+    location=input[breaker-breaker:breaker]
+    value=input[breaker:]
+    value=value.strip()
     finalList=[]
+    final="I don't understand"
     for i in range(len(pollutant_production_db_CHI)):
         if location==pollutant_production_db_CHI[i][1]:
             finalList=pollutant_production_db_CHI[i][2]
-    if value=='good':
-        final=finalList[1]
-    if value=='moderate':
-        final=finalList[2]
-    if value=='unhealthy':
-        final=finalList[3]+finalList[4]
+    if input==["illinois"] or finalList==[]:
+        pass
+    else:
+        if value=='good':
+            final=finalList[1]
+        if value=='moderate':
+            final=finalList[2]
+        if value=='unhealthy':
+            final=finalList[3]+finalList[4]
     return final
-
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
 
@@ -135,6 +131,7 @@ def search_pa_list(src: List[str]) -> List[str]:
         # and setting ans equal to the output of that function
         if type(val)==list:
             val=' '.join(val)
+        print(val)
         ans=BestMatch[1](val)
 
     # Telling the function what to do if there are no matches(if statement) 
