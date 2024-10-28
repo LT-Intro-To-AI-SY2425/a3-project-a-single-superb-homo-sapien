@@ -49,13 +49,12 @@ def get_year_of_data(data):
     return ans
 
 def days_with_AQI(input):
-
     breaker=input.rfind(" ")
     location=input[breaker-breaker:breaker]
-    value=input[breaker:]
-    value=value.strip()
+    value=input[breaker:].strip()
     finalList=[]
     final="I don't understand"
+
     for i in range(len(pollutant_production_db_CHI)):
         if location==pollutant_production_db_CHI[i][1]:
             finalList=pollutant_production_db_CHI[i][2]
@@ -69,6 +68,7 @@ def days_with_AQI(input):
         if value=='unhealthy':
             final=finalList[3]+finalList[4]
     return final
+
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
 
@@ -90,10 +90,10 @@ def search_pa_list(src: List[str]) -> List[str]:
     HighestMatches=0
     BestMatch=0
     ans=[]
-    #src=str.split(src)
+
     # FIGURING OUT WHAT TUPLE TO USE
 
-    # Creating a list(matches[]) of the number of matches between each value of src[] 
+    # Creating a list(matches[]) of the number of matches between each value of src[]
     # and the corresponding value of each of the 8 patterns
     for i in range(len(pa_list)):
         for i2 in range(len(pa_list[i][0])):
@@ -103,7 +103,7 @@ def search_pa_list(src: List[str]) -> List[str]:
         matches.append(CurrentListMatches)
         CurrentListMatches=0
 
-    # Figuring out which tuple has the highest match between its pattern and the given source using matches[] 
+    # Figuring out which tuple has the highest match between its pattern and the given source using matches[]
     for i in range(len(matches)):
         if matches[i]>HighestMatches:
             BestMatch=pa_list[i]
@@ -122,7 +122,7 @@ def search_pa_list(src: List[str]) -> List[str]:
         # what to send into the function
         for i3 in range(len(BestMatch[0])):
             if BestMatch[0][i3]=="%":
-                while i2 in range(Diff+1): 
+                while i2 in range(Diff+1):
                     val.append(src[i3+i2])
                     i2+=1
             if BestMatch[0][i3]=="_": val.append(src[i3+Diff]);
@@ -133,7 +133,7 @@ def search_pa_list(src: List[str]) -> List[str]:
             val=' '.join(val)
         ans=BestMatch[1](val)
 
-    # Telling the function what to do if there are no matches(if statement) 
+    # Telling the function what to do if there are no matches(if statement)
     # or if the function of said match returns blank list(elif statement)
     if BestMatch==0: ans="I don't understand"
     elif ans==[]: ans="No answers"
@@ -153,4 +153,5 @@ def query_loop() -> None:
             break
 
     print("\nThank you for using this database.\n")
+    
 query_loop()
